@@ -23,16 +23,30 @@ def main():
         return
 
     print(f"检测到串口：{serial_port}")
-    motor = driver.RS00Driver(serial_port)
+    motor = driver.RS00Driver(serial_port, motor_id = motor_id)
+
 
     # 使能电机
-    motor.enable_motor(motor_id)
+    # motor.enable_motor()
+
+    # 复位电机
+    motor.stop_motor()
+
+    # 设置零位
+    # motor.set_zero()
 
     # 运控电机
-    motor_status = motor.send_motion_control(motor_id, 0, 1, 1,1, 0)
+    # motor_status = motor.send_motion_control(5, 1, 1,1, 0)
+
+    motor.write_runmode("速度模式")
+
+    # 设置电机ID
+    # motor.set_canid(0x01)
+
+    # motor.get_device_id()
 
     # 停止电机
-    motor.stop_motor(motor_id, motor_status['faults'])
+    # motor.stop_motor(motor_status['faults'])
 
 if __name__ == "__main__":
     main()

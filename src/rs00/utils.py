@@ -86,25 +86,67 @@ def unpack_id(can_id):
     motor_id = logic_id & 0xFF
     return mode, master_id, motor_id
 
-def pack_data_8bytes(x4, x3, x2, x1):
+def pack_data_8bytes_big(x1, x2, x3, x4):
     """
-    将数据打包成8字节格式并添加数据长度
+    将数据打包成8字节格式并添加数据长度(大端序)
     参数：
         int或hex格式数据（示例：0x01,01）
-        x4：高位
-        x1：低位
+        x1：在前（从Byte0开始）
+        x4：在后（Byte8）
     返回：
         data:08 + 八字节的数据（字符串格式）
     """
-    data = bytearray([0x08])  # 以长度字节开头
+    # 初始化一个8字节全为0的列表
+    data_list = [0] * 8
 
-    # 添加4个值的字节
-    data.extend(x1.to_bytes(2, 'big'))
-    data.extend(x2.to_bytes(2, 'big'))
-    data.extend(x3.to_bytes(2, 'big'))
-    data.extend(x4.to_bytes(2, 'big'))
+    # 第1个变量 (Byte 0-1)
+    data_list[0] = (x1 >> 8) & 0xFF
+    data_list[1] = x1 & 0xFF
 
-    return data.hex()
+    # 第2个变量 (Byte 2-3)
+    data_list[2] = (x2 >> 8) & 0xFF
+    data_list[3] = x2 & 0xFF
+
+    # 第3个变量 (Byte 4-5)
+    data_list[4] = (x3 >> 8) & 0xFF
+    data_list[5] = x3 & 0xFF
+
+    # 第4个变量 (Byte 6-7)
+    data_list[6] = (x4 >> 8) & 0xFF
+    data_list[7] = x4 & 0xFF
+
+    return pack_datalist_to_hex(data_list)
+
+def pack_data_8bytes_little(x1, x2, x3, x4):
+    """
+    将数据打包成8字节格式并添加数据长度(大端序)
+    参数：
+        int或hex格式数据（示例：0x01,01）
+        x1：在前（从Byte0开始）
+        x4：在后（Byte8）
+    返回：
+        data:08 + 八字节的数据（字符串格式）
+    """
+    # 初始化一个8字节全为0的列表
+    data_list = [0] * 8
+
+    # 第1个变量 (Byte 0-1) - 使用小端序
+    data_list[0] = x1 & 0xFF  # 低字节
+    data_list[1] = (x1 >> 8) & 0xFF  # 高字节
+
+    # 第2个变量 (Byte 2-3) - 使用小端序
+    data_list[2] = x2 & 0xFF  # 低字节
+    data_list[3] = (x2 >> 8) & 0xFF  # 高字节
+
+    # 第3个变量 (Byte 4-5) - 使用小端序
+    data_list[4] = x3 & 0xFF  # 低字节
+    data_list[5] = (x3 >> 8) & 0xFF  # 高字节
+
+    # 第4个变量 (Byte 6-7) - 使用小端序
+    data_list[6] = x4 & 0xFF  # 低字节
+    data_list[7] = (x4 >> 8) & 0xFF  # 高字节
+
+    return pack_datalist_to_hex(data_list)
 
 def unpack_data_8bytes(data_hex):
     """
@@ -120,6 +162,13 @@ def unpack_data_8bytes(data_hex):
     x3 = int.from_bytes(data[4:6], 'big')
     x4 = int.from_bytes(data[6:8], 'big')
     return x4, x3, x2, x1
+
+def pack_datalist_to_hex(data_list):
+    """
+    统一打包函数：将[Byte0, Byte1...Byte7]列表转为带DLC头的hex字符串
+    """
+    # 08 代表 DLC 长度为 8
+    return "08" + bytes(data_list).hex()
 
 def unpack_motor_feedback(res):
     """
