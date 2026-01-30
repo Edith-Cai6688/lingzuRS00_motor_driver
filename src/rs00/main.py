@@ -1,3 +1,5 @@
+import time
+
 import serial.tools.list_ports
 
 import driver
@@ -25,28 +27,41 @@ def main():
     print(f"检测到串口：{serial_port}")
     motor = driver.RS00Driver(serial_port, motor_id = motor_id)
 
-
-    # 使能电机
-    # motor.enable_motor()
-
     # 复位电机
     motor.stop_motor()
 
     # 设置零位
-    # motor.set_zero()
+    motor.set_zero()
 
     # 运控电机
     # motor_status = motor.send_motion_control(5, 1, 1,1, 0)
 
-    motor.write_runmode("速度模式")
+    if motor.write_runmode("位置模式(PP)"):
+        time.sleep(0.05)
+        # 使能电机
+        motor.enable_motor()
+
+        # 运控电机
+        # motor_status = motor.send_motion_control(0, 1, 1,1, 0)
+
+        # 速度模式电机控制
+        # motor_status = motor.send_speed_control(10, 10, 20)
+
+        # 电流模式电机控制
+        # motor_status =motor.send_current_control(0.5)
+
+        # 位置模式(CSP)电机控制
+        motor_status = motor.send_loc_control_pp(3.14)
+        time.sleep(3)
+
+        # 停止电机
+        motor.stop_motor(motor_status['faults'])
+
 
     # 设置电机ID
     # motor.set_canid(0x01)
-
     # motor.get_device_id()
 
-    # 停止电机
-    # motor.stop_motor(motor_status['faults'])
 
 if __name__ == "__main__":
     main()
