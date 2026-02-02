@@ -186,7 +186,7 @@ class RS00Driver:
             return False
 
 
-    def read_parameter(self, index):
+    def read_parameter(self, index, is_float):
         """
         读取电机单个参数
         参数:
@@ -208,8 +208,12 @@ class RS00Driver:
             print("读取参数成功!")
             # 将响应数据由bit类型转换成字节, 低字节在前(小端序), 前4个字节是相应的参数数据
             data = bytearray.fromhex(res_data)
-            parameter = int.from_bytes(data[4:8], 'little')
-            return parameter
+            if is_float:
+                return struct.unpack('<f', bytes(data[4:8]))[0]
+            else:
+                # 整数参数
+                return int.from_bytes(data[4:8], 'little')  # 可能有符号
+
 
     def read_runmode(self):
         """
@@ -217,7 +221,7 @@ class RS00Driver:
         返回:
             result:电机的运行模式,字符串格式
         """
-        parameter = self.read_parameter(0x7005)
+        parameter = self.read_parameter(0x7005, is_float = False)
         runmode = {
             0:"运控模式",
             1:"位置模式(PP)",
@@ -228,6 +232,22 @@ class RS00Driver:
         result = runmode.get(parameter)
         print(f"当前电机的运行模式是:{result}")
         return result
+
+    def save_parameter(self):
+        """
+        保存电机写入的参数
+        返回：
+            status:电机的状态
+        """
+        data_list = [1, 2, 3, 4, 5, 6, 7, 8]
+        data = utils.pack_datalist_to_hex(data_list)
+        res = self.send_request(mode = 0x16, motor_id = self.motor_id, master_id = self.master_id, data = data)
+
+        if not res:
+            print(f"[错误] 保存参数通讯失败：未收到ID为{self.motor_id}的电机应答")
+
+        else:
+            return res
 
     def write_parameter(self, index, parameter):
         """
@@ -253,6 +273,7 @@ class RS00Driver:
                 return False, "COMMUNICATION_TIMEOUT"
 
             status = utils.unpack_motor_feedback(res)
+            self.save_parameter()
             return True, status
 
         except Exception as e:
@@ -435,6 +456,9 @@ class RS00Driver:
         else:
             print(f"ID为{self.motor_id}的电机发送位置模式(PP)参数失败！请重试")
             return False
+
+
+
 
 
 
