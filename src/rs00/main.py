@@ -40,9 +40,6 @@ def main():
     # 设置电机ID
     # motor.set_canid(0x01)
 
-    # 运控电机
-    # motor_status = motor.send_motion_control(5, 1, 1,1, 0)
-
     # if motor.write_runmode("速度模式"):
         # time.sleep(0.05)
         # 使能电机
@@ -63,11 +60,6 @@ def main():
 
         # 停止电机
         # motor.stop_motor(motor_status['faults'])
-
-
-
-
-
 
 
 if __name__ == "__main__":

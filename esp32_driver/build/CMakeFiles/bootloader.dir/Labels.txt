@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/mxk/robostride/program/twai_self_test/build/CMakeFiles/bootloader
+/home/mxk/robostride/program/twai_self_test/build/CMakeFiles/bootloader.rule
+/home/mxk/robostride/program/twai_self_test/build/CMakeFiles/bootloader-complete.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/mxk/robostride/program/twai_self_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

@@ -1,0 +1,2 @@
+STM32控制视频教程链接：
+【使用STM32控制板+CAN库函数控制DrEmpower关节电机 | 手把手教学】 https://www.bilibili.com/video/BV1VN411e7JE/?share_source=copy_web&vd_source=811c04a3f1d6e1e690aa2351ac85a84d

@@ -1,0 +1,23 @@
+menu "Example Configuration"
+
+    orsource "$IDF_PATH/examples/common_components/env_caps/$IDF_TARGET/Kconfig.env_caps"
+
+    config EXAMPLE_TX_GPIO_NUM
+        int "TX GPIO number"
+        range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
+        default 21 if IDF_TARGET_ESP32
+        default 4 if IDF_TARGET_ESP32S3
+        default 0
+        help
+            此选项选择用于 TX 信号的 GPIO 引脚。将 TX 信号连接到 TJA1050 的 TXD 引脚。
+
+    config EXAMPLE_RX_GPIO_NUM
+        int "RX GPIO number"
+        range ENV_GPIO_RANGE_MIN ENV_GPIO_IN_RANGE_MAX
+        default 22 if IDF_TARGET_ESP32
+        default 5 if IDF_TARGET_ESP32S3
+        default 2
+        help
+            此选项选择用于 RX 信号的 GPIO 引脚。将 RX 信号连接到 TJA1050 的 RXD 引脚。
+
+endmenu

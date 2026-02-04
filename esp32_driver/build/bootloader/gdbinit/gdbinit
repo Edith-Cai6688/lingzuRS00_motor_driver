@@ -1,0 +1,2 @@
+source /home/mxk/robostride/program/twai_self_test/build/bootloader/gdbinit/symbols
+source /home/mxk/robostride/program/twai_self_test/build/bootloader/gdbinit/connect
