@@ -1,2 +1,0 @@
-# lingzuRS00_motor_driver
-用python语言给灵足RS00电机写的驱动代码，适用于官方的usb转can模块

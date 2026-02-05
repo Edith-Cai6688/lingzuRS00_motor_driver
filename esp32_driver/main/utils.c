@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "rs00_driver.h"
 #include <string.h>
 
 /**
@@ -54,6 +55,17 @@ void pack_write_param_little(uint8_t *dst, uint16_t index, float value) {
 }
 
 /**
+ * @brief 解析电机读取的参数
+ * @param dst 返回的数据
+ * @return motor
+ */
+motor_status unpack_read_param_little(uint8_t *dst){
+    motor.index = (uint16_t)dst[0] | ((uint8_t)dst[1] << 8);
+    motor.data = (uint32_t)dst[4] | ((uint32_t)dst[5] << 8) | ((uint32_t)dst[6] << 16) | ((uint32_t)dst[7] << 24);
+    return motor;
+}
+
+/**
  * @brief 解析电机反馈数据包 
  * @param can_id 接收到的扩展帧 ID
  * @param data 接收到的 8 字节数据
@@ -77,10 +89,10 @@ motor_status_t decode_motor_feedback(uint32_t can_id, uint8_t* data) {
     status.mode_num = mode_state;
 
     // 2. 解析 8 字节数据 (大端序)
-    uint16_t t_int   = (data[0] << 8) | data[1];
-    uint16_t tau_int = (data[2] << 8) | data[3];
-    uint16_t vel_int = (data[4] << 8) | data[5];
-    uint16_t pos_int = (data[6] << 8) | data[7];
+    uint16_t pos_int   = (data[0] << 8) | data[1];
+    uint16_t vel_int = (data[2] << 8) | data[3];
+    uint16_t tau_int = (data[4] << 8) | data[5];
+    uint16_t t_int = (data[6] << 8) | data[7];
 
     // 3. 转换物理量
     status.temp = (float)t_int / 10.0f;

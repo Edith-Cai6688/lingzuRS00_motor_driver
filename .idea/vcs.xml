@@ -3,5 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/esp32_driver/LingZu/MotorStudio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/esp32_driver/LingZu/rob-stride_release" vcs="Git" />
   </component>
 </project>

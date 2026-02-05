@@ -9,21 +9,30 @@
 
 /* 运行模式定义 (对应 Python runmode 字典) */
 typedef enum {
-    RS00_MODE_MOTION = 0,
-    RS00_MODE_PP     = 1,
-    RS00_MODE_SPEED  = 2,
-    RS00_MODE_CUR    = 3,
-    RS00_MODE_CSP    = 5
+    MOTION  = 0,
+    PP      = 1,
+    SPEED   = 2,
+    CURRENT = 3,
+    CSP     = 4
 } rs00_runmode_t;
 
 typedef struct{
     uint8_t id;
     uint8_t mode_num; //0:复位 1:标定 2:运行
     uint8_t fault; //0:无故障 1:有故障
+    uint8_t runmode; 
+    uint16_t index;
+    uint32_t data;
     float pos;
 } motor_status;
 
-extern motor_status motor;
+typedef struct {
+    int mode_val;
+    const char* mode_name;
+} mode_map_t;
+
+
+extern volatile motor_status motor;
 
 
 /* 基础指令 */
@@ -37,6 +46,7 @@ esp_err_t rs00_set_can_id(uint8_t old_id, uint8_t new_id);
 esp_err_t rs00_write_parameter(uint8_t motor_id, uint16_t index, float value);
 esp_err_t rs00_save_parameter(uint8_t motor_id);
 esp_err_t rs00_write_runmode(uint8_t motor_id, rs00_runmode_t mode);
+esp_err_t rs00_read_runmode(uint8_t motor_id);
 
 /* 控制指令 */
 // 运控模式

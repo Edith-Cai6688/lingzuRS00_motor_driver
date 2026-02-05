@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "rs00_driver.h"
 
 
 #define P_MIN -12.57f
@@ -27,6 +28,7 @@ typedef struct {
 } motor_status_t;
 
 
+
 // 映射 Python 的 pack_id: (mode << 24) | (master_id << 8) | motor_id
 uint32_t pack_id(uint8_t mode, uint16_t master_id, uint8_t motor_id);
 void unpack_id(uint32_t can_id, uint8_t *mode, uint16_t *master_id, uint8_t *motor_id);
@@ -40,6 +42,9 @@ void pack_data_8bytes_big(uint8_t *dst, uint16_t p, uint16_t v, uint16_t kp, uin
 
 // 小端序打包 (用于写参数)
 void pack_write_param_little(uint8_t *dst, uint16_t index, float value);
+
+// 小端序解析(用于读参数)
+motor_status unpack_read_param_little(uint8_t *dst);
 
 // 解析电机反馈数据包
 motor_status_t decode_motor_feedback(uint32_t can_id, uint8_t* data);
